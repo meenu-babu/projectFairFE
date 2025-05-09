@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import firstImage from '../assets/image1.png'
 import { Link } from 'react-router-dom'
 import ProjectCard from '../components/ProjectCard'
 
 function Home() {
+
+  const [islogin,setIsLogin]=useState(false);
+  useEffect(()=>{
+    if(sessionStorage.getItem("token")){
+        setIsLogin(true)
+    }
+  },[])
   return (
    <>
    <div className='container-fluid bg-success p-5'style={{width:'100%',height:'100vh'}}>
@@ -15,9 +22,18 @@ function Home() {
         <h6>
           One stop destination for all software projects
         </h6>
-        <Link to="/auth" style={{textDecoration:'none'}}>
-        <button className='btn btn-outline-light mt-3'>GET STARTED<i class="fa-solid fa-arrow-right ms-3"></i></button>
-        </Link>
+        {
+          !islogin ?
+          <Link to="/login" style={{textDecoration:'none'}}>
+          <button className='btn btn-outline-light mt-3'>GET STARTED<i class="fa-solid fa-arrow-right ms-3"></i></button>
+          </Link>
+          :
+          <Link to="/dashboard" style={{textDecoration:'none'}}>
+          <button className='btn btn-outline-light mt-3'>MANAGE PROJECTS<i class="fa-solid fa-arrow-right ms-3"></i></button>
+          </Link>
+
+        }
+       
         
       </div>
       </Col>
