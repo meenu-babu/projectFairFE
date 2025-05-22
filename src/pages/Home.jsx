@@ -3,10 +3,24 @@ import { Col, Row } from 'react-bootstrap'
 import firstImage from '../assets/image1.png'
 import { Link } from 'react-router-dom'
 import ProjectCard from '../components/ProjectCard'
+import { getHomeProjectApi } from '../services/allApi'
 
 function Home() {
 
   const [islogin,setIsLogin]=useState(false);
+const [homeProject,setHomeProject]=useState([])
+
+
+  const getHomeProject=async()=>{
+    const result=await getHomeProjectApi();
+    console.log("HOME PROJECT");
+    console.log(result)
+    setHomeProject(result.data)
+  }
+
+useEffect(()=>{
+  getHomeProject()
+},[])
   useEffect(()=>{
     if(sessionStorage.getItem("token")){
         setIsLogin(true)
@@ -47,15 +61,18 @@ function Home() {
     <h3 className='text-center my-5'>EXPLORE YOUR PROJECTS</h3>
     <div className='row mb-5'>
       <marquee scrollamount="10">
-      <div className='col-md-4 col-lg-4 justify-content-center d-flex p-4' style={{width:'400px'}}>
-      <ProjectCard/>
+        <div className='row'>
+          {
+          homeProject.length>0 &&
+          homeProject.map(item=>(
+            <div className='col-md-4 col-lg-4 justify-content-center d-flex p-4' style={{width:'400px'}}>
+      <ProjectCard projectData={item}/>
       </div>
-      <div className='col-md-4 col-lg-4 justify-content-center d-flex p-4' style={{width:'400px'}}>
-      <ProjectCard/>
-      </div>
-      <div className='col-md-4 col-lg-4 justify-content-center d-flex p-4' style={{width:'400px'}}>
-      <ProjectCard/>
-      </div>
+          )
+          )
+        }
+        </div>
+      
       </marquee>
       <Link to={'/project'} style={{textDecoration:'none'}}>
      <h5 className='text-center text-warning my-5 fw-bold'>SEE MORE PROJECTS</h5>

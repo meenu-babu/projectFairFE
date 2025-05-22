@@ -1,9 +1,27 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import AddProject from './AddProject'
 import { Link } from 'react-router-dom'
 import EditPjoject from './EditPjoject'
+import { getUserProjectApi } from '../services/allApi'
 
 function MyProject() {
+  const [userProject,setUserProject]=useState([])
+const getUserProject=async()=>{
+  const token=sessionStorage.getItem("token");
+  const requestHeader={
+    "Content-Type":'application/json',
+    "Authorization":`Bearer ${token}`
+  }
+  const result=await getUserProjectApi(requestHeader);
+  console.log("user projects");
+  console.log(result.data)
+  setUserProject(result.data)
+}
+
+useEffect(()=>{
+  getUserProject
+},[])
+
   return (
     <>
     <div className='shadow p-5 mb-5'>

@@ -2,9 +2,10 @@ import React, { useEffect } from 'react'
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row,  ToastContainer } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
+import { addProjectApi } from '../services/allApi';
 function AddProject() {
     const [show, setShow] = useState(false);  
     
@@ -39,7 +40,7 @@ useEffect(()=>{
 },[])
 
 
-    const addProject=()=>{
+    const addProject=async()=>{
       console.log("Project Details")
       console.log(projectDetails);
        const {title,language,githubLink,websiteLink,overview,projectImage}=projectDetails
@@ -60,6 +61,18 @@ useEffect(()=>{
            const reqHeader={
             "Content-Type":"multipart/form-data",
             "Authorization":`Bearer ${token}`
+           }
+           const result=await addProjectApi(reqBody,reqHeader)
+           if(result.status===201){
+            toast.success(result.data)
+            handleClear();
+            handleClose();
+           }
+           else if(result.status===406){
+            toast.warning(`${title} already exist, please add a new project`)
+           }
+           else{
+            toast.error("something happened !!!!!")
            }
         }
 

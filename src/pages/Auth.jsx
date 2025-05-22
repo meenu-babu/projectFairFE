@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
-import { Link, Navigate } from 'react-router-dom'
+import { Link} from 'react-router-dom'
 import authImage from '../assets/image2.png'
 import { loginApi, registerApi } from '../services/allApi'
-
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 
 
 
 export default function Auth({registerPage}) {
+
+  const navigate = useNavigate();
   const isRegisterPage=registerPage ? true : false;
 //create a state to hold all innnnt values
 const [userData,setUserData]=useState({
@@ -38,7 +40,7 @@ const handleRegister=async()=>{
         password:""
       })
       //load login
-      Navigate('/login')
+      navigate('/login')
     }
     else if(result.status===409){
       toast.warning(`${userData.email} Already exist,please login`)
@@ -65,6 +67,7 @@ const handleLogin=async()=>{
       console.log("respone from login")
       console.log(result)
       if(result.status===200){
+        alert(result.status)
         sessionStorage.setItem("existingUser",JSON.stringify(result.data.user_data));
         sessionStorage.setItem("token",result.data.jwttoken)
         toast.success("Login successfully");

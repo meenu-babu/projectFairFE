@@ -2,8 +2,21 @@ import React from 'react'
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 function Header() {
+const navigate=useNavigate()
+const logout=()=>{
+  if(sessionStorage.getItem("token"))
+  {
+    sessionStorage.removeItem("token");
+  }
+  if(sessionStorage.getItem("existingUser"))
+  {
+    sessionStorage.removeItem("existingUser")
+  }
+  navigate('/')
+}
+
   return (
    <>
    <Navbar className="bg-primary">
