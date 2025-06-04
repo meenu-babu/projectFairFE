@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AddProject from './AddProject'
 import { Link } from 'react-router-dom'
 import EditPjoject from './EditPjoject'
 import { getUserProjectApi } from '../services/allApi'
+import { addProjectResponseContext } from '../Context/ContextShare'
 
 function MyProject() {
   const [userProject,setUserProject]=useState([])
+  const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
 const getUserProject=async()=>{
   const token=sessionStorage.getItem("token");
   const requestHeader={
@@ -19,8 +21,8 @@ const getUserProject=async()=>{
 }
 
 useEffect(()=>{
-  getUserProject
-},[])
+  getUserProject()
+},[addProjectResponse])
 
   return (
     <>
@@ -29,7 +31,10 @@ useEffect(()=>{
             <h5 className='text-success me-auto'>MY PROJECTS</h5>
             <AddProject/>
         </div>
-        <div className='p-3 mt-3 rounded d-flex' style={{backgroundColor:'lightgray'}}>
+        {
+          userProject ?.length>0?
+          userProject.map(item=>(
+               <div className='p-3 mt-3 rounded d-flex' style={{backgroundColor:'lightgray'}}>
             <h6>MEDIA PLAYER</h6>
                 <div className='d-flex ms-auto align-items-center'>
                     <Link>
@@ -38,10 +43,17 @@ useEffect(()=>{
                     <Link>
                     <i class="fa-solid fa-link  fa-lg " style={{color:'blue'}}></i>
                     </Link>
-                    <EditPjoject/>
+                    <EditPjoject project={item}/>
                 </div>
 
         </div>
+
+          )):
+          <p>
+              No projects uploaded yet....
+          </p>
+        }
+       
     </div>
     
     </>
