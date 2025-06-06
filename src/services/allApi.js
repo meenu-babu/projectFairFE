@@ -30,3 +30,8 @@ export const getAllProjectApi=async(searchKey,reqheader)=>{
 export const getUserProjectApi=async(reqheader)=>{
     return await commonApi('GET',`${base_url}/project/userproject`,"",reqheader)
 }
+
+//update project
+export const updateProjectApi=async(projectId,reqBody,reqHeader)=>{
+    return await commonApi('PUT',`${base_url}/project/edit/${projectId}`,reqBody,reqHeader)
+}

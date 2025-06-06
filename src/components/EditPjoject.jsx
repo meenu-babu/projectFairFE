@@ -1,25 +1,74 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { base_url } from '../services/base_url';
+import { toast } from 'react-toastify';
+import { updateProjectApi } from '../services/allApi';
+
 //here project is the props variable from Myproject.jsx component
 function EditPjoject({project}) {
+  const [preview, setpreview] = useState("")
      const [show, setShow] = useState(false);    
         const handleClose = () => setShow(false);
         const handleShow = () => setShow(true);
         console.log("Edit project details")
         console.log(project)
          const [projectDetails,setProjectDetails]=useState({
+              id:project._id,
               title:project.title,
               language:project.language,
               githubLink:project.github,
               websiteLink:project.website,
               overview:project.overview,
-              projectImage:project.projectImage
+              projectImage:""
             });
+
+
+            useEffect(()=>{
+              if(projectDetails.projectImage){
+                setpreview(URL.createObjectURL(projectDetails.projectImage))
+              }
+            },[projectDetails.projectImage])
+
+
+            const handleUpdate=async()=>{
+              console.log("Updated projrct details")
+              console.log(projectDetails)
+              const {id,title,language,githubLink,websiteLink,overview,projectImage}=projectDetails;
+              if(!title||!language||!githubLink||!websiteLink||!overview){
+                toast.warning("Please fill form completely")
+              }
+              else{
+                     //send data to backend
+          //here we have to send a file,so instead of sending object we are passing data as form data
+          const reqBody=new FormData();
+          reqBody.append("title",title);
+          reqBody.append("language",language);
+          reqBody.append("githubLink",githubLink);
+          reqBody.append("websiteLink",websiteLink);
+          reqBody.append("overview",overview);
+          preview?reqBody.append("projectImage",projectImage):reqBody.append("projectImage",project.projectImage)
+          const token=sessionStorage.getItem("token")
+          if(preview){
+            const reqHeader={
+              "Content-Type":"multipart/form-data",
+              "Authorization":`Bearer ${token}`
+            }
+            const result=await updateProjectApi(projectDetails.id,reqBody,reqHeader)
+          }
+              else{
+                const reqHeader={
+              "Content-Type":"application/json",
+              "Authorization":`Bearer ${token}`
+            }
+            const result=await updateProjectApi(id,reqBody,reqHeader)
+              }
+
+              }
+            }
   return (
    <>
    <i class="fa-solid fa-pen-to-square ms-3 text-danger" onClick={handleShow}></i>
@@ -32,8 +81,10 @@ function EditPjoject({project}) {
           <Row>
             <Col md={6} lg={6}>
             <label htmlFor='projectImg'>
-                <input type="file" id="projectImg" style={{display:'none'}}/>
-                <img src={`${base_url}/imagefolder/${projectDetails.projectImage}`} width={'100%'}/>
+                <input type="file" id="projectImg" style={{display:'none'}}
+                onChange={(e)=>setProjectDetails({...projectDetails,projectImage:e.target.files[0]})}/>
+                <img src={preview ? preview :`${base_url}/imagefolder/${project.projectImage}`}
+                 width={'100%'}/>
                 {/* the /image folder is obtained form serverside index.js */}
             </label>
            </Col>
@@ -72,7 +123,7 @@ function EditPjoject({project}) {
          <Button variant='secondary' onClick={handleClose}>
             CANCEL</Button>
 
-<Button variant='primary' onClick={handleClose}>
+<Button variant='primary' onClick={handleUpdate}>
    UPDATE PROJECT
     </Button>        
     </Modal.Footer>

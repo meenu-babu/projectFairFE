@@ -28,7 +28,7 @@ const logout=()=>{
           </Navbar.Brand>
           </Link>
           
-          <Button variant="danger"><i class="fa-solid fa-power-off me-2"></i>LOGOUT</Button>
+          <Button variant="danger" onClick={logout}><i class="fa-solid fa-power-off me-2"></i>LOGOUT</Button>
           
         </Container>
       </Navbar>
