@@ -5,6 +5,7 @@ import Auth from "./pages/Auth"
 import Dashboard from "./pages/Dashboard"
 import Home from "./pages/Home"
 import Project from "./pages/Project"
+import { ToastContainer } from "react-toastify"
 
 function App() {
   
@@ -22,6 +23,8 @@ function App() {
       </Routes>
      
       <Footer/>
+
+      <ToastContainer position="top-center" autoClose={2000} />
     </>
   )
 }

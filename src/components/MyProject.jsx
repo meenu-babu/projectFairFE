@@ -3,12 +3,15 @@ import AddProject from './AddProject'
 import { Link } from 'react-router-dom'
 import EditPjoject from './EditPjoject'
 import { getUserProjectApi } from '../services/allApi'
-import { addProjectResponseContext } from '../Context/ContextShare'
+import { addProjectResponseContext, editProjectResponseContext } from '../Context/ContextShare'
 
 function MyProject() {
   const [userProject,setUserProject]=useState([])
   const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
-const getUserProject=async()=>{
+  const {editProjectResponse,setEditProjectResponse}=useContext(editProjectResponseContext)
+
+
+  const getUserProject=async()=>{
   const token=sessionStorage.getItem("token");
   const requestHeader={
     "Content-Type":'application/json',
@@ -22,7 +25,7 @@ const getUserProject=async()=>{
 
 useEffect(()=>{
   getUserProject()
-},[addProjectResponse])
+},[addProjectResponse,editProjectResponse])
 
   return (
     <>
@@ -35,7 +38,9 @@ useEffect(()=>{
           userProject ?.length>0?
           userProject.map(item=>(
                <div className='p-3 mt-3 rounded d-flex' style={{backgroundColor:'lightgray'}}>
-            <h6>MEDIA PLAYER</h6>
+            <h6>
+              {item.title}
+            </h6>
                 <div className='d-flex ms-auto align-items-center'>
                     <Link>
                     <i class="fa-brands fa-github fa-lg me-3" style={{color:'blue'}}></i>

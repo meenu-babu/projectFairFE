@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
@@ -7,15 +7,25 @@ import { Link } from "react-router-dom";
 import { base_url } from '../services/base_url';
 import { toast } from 'react-toastify';
 import { updateProjectApi } from '../services/allApi';
+import { editProjectResponseContext } from '../Context/ContextShare';
 
 //here project is the props variable from Myproject.jsx component
 function EditPjoject({project}) {
   const [preview, setpreview] = useState("")
-     const [show, setShow] = useState(false);    
-        const handleClose = () => setShow(false);
+     const [show, setShow] = useState(false); 
+     const {editProjectResponse,setEditProjectResponse}=useContext(editProjectResponseContext)
+     
+
+        const handleClose = () =>{
+           setShow(false);
+           resetForm()
+        }
         const handleShow = () => setShow(true);
+        
         console.log("Edit project details")
         console.log(project)
+
+
          const [projectDetails,setProjectDetails]=useState({
               id:project._id,
               title:project.title,
@@ -32,6 +42,26 @@ function EditPjoject({project}) {
                 setpreview(URL.createObjectURL(projectDetails.projectImage))
               }
             },[projectDetails.projectImage])
+
+
+//to reset the form fields
+           const resetForm=()=>{
+            setProjectDetails({
+              id:project._id,
+              title:project.title,
+              language:project.language,
+              githubLink:project.github,
+              websiteLink:project.website,
+              overview:project.overview,
+              projectImage:""
+            })
+            setpreview("")
+           } 
+
+const handleCloseClear=()=>{
+  handleClose();
+  resetForm();
+}
 
 
             const handleUpdate=async()=>{
@@ -58,6 +88,14 @@ function EditPjoject({project}) {
               "Authorization":`Bearer ${token}`
             }
             const result=await updateProjectApi(projectDetails.id,reqBody,reqHeader)
+             if(result.status===200){
+              setEditProjectResponse(result.data)
+              toast.success(`${title} updated successfully`)
+              setShow(false)
+            }
+            else{
+              toast.error("something happened")
+            }
           }
               else{
                 const reqHeader={
@@ -65,6 +103,15 @@ function EditPjoject({project}) {
               "Authorization":`Bearer ${token}`
             }
             const result=await updateProjectApi(id,reqBody,reqHeader)
+            if(result.status===200){
+              setEditProjectResponse(result.data)
+              toast.success(`${title} updated successfully`)
+              setShow(false)
+            }
+            else{
+              toast.error("something happened")
+            }
+           
               }
 
               }
@@ -121,7 +168,7 @@ function EditPjoject({project}) {
         </Modal.Body>
         <Modal.Footer>
          <Button variant='secondary' onClick={handleClose}>
-            CANCEL</Button>
+            reset</Button>
 
 <Button variant='primary' onClick={handleUpdate}>
    UPDATE PROJECT
