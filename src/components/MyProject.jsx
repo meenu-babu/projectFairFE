@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import AddProject from './AddProject'
 import { Link } from 'react-router-dom'
 import EditPjoject from './EditPjoject'
-import { getUserProjectApi } from '../services/allApi'
+import { deleteProject, deleteProjectApi, getUserProjectApi } from '../services/allApi'
 import { addProjectResponseContext, editProjectResponseContext } from '../Context/ContextShare'
 
 function MyProject() {
@@ -27,6 +27,18 @@ useEffect(()=>{
   getUserProject()
 },[addProjectResponse,editProjectResponse])
 
+
+const handleDelete=async(projectId)=>{
+  const token=sessionStorage.getItem("token")
+  const reqHeader={
+     "Content-Type":'application/json',
+    "Authorization":`Bearer ${token}`
+  }
+
+const result= await deleteProjectApi(projectId,reqHeader);
+}
+
+
   return (
     <>
     <div className='shadow p-5 mb-5'>
@@ -42,12 +54,15 @@ useEffect(()=>{
               {item.title}
             </h6>
                 <div className='d-flex ms-auto align-items-center'>
-                    <Link>
+                    <Link to={item.github} target='_blank'>
                     <i class="fa-brands fa-github fa-lg me-3" style={{color:'blue'}}></i>
                     </Link>
-                    <Link>
+
+                    <Link to={item.website} target='_blank'>
                     <i class="fa-solid fa-link  fa-lg " style={{color:'blue'}}></i>
                     </Link>
+
+                    <i className='fa-solid fa-trash ms-3' style={{color:'red'}} onClick={()=>handleDelete(item._id)}></i>
                     <EditPjoject project={item}/>
                 </div>
 
