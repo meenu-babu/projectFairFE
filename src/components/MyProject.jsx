@@ -79,7 +79,6 @@ else{
                 </div>
 
         </div>
-
           )):
           <p>
               No projects uploaded yet....
