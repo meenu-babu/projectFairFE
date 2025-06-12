@@ -1,10 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { Link, useNavigate } from 'react-router-dom';
+import { isAuthTokenContext } from '../Context/ContextShare';
 function Header() {
+
 const navigate=useNavigate()
+const {isAuthToken,setIsAuthToken}=useContext(isAuthTokenContext)
+
+
 const logout=()=>{
   if(sessionStorage.getItem("token"))
   {
@@ -14,6 +19,7 @@ const logout=()=>{
   {
     sessionStorage.removeItem("existingUser")
   }
+  setIsAuthToken(false)
   navigate('/')
 }
 

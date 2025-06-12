@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import { Link} from 'react-router-dom'
 import authImage from '../assets/image2.png'
 import { loginApi, registerApi } from '../services/allApi'
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
-
-
+import { toast } from 'react-toastify';
+import { isAuthTokenContext } from '../Context/ContextShare'
 
 
 export default function Auth({registerPage}) {
 
-  const navigate = useNavigate();
   const isRegisterPage=registerPage ? true : false;
+ const {isAuthToken,setIsAuthToken}=useContext(isAuthTokenContext)
+
+  const navigate = useNavigate();
+
+
 //create a state to hold all innnnt values
 const [userData,setUserData]=useState({
   name:"",
@@ -70,6 +73,7 @@ const handleLogin=async()=>{
         alert(result.status)
         sessionStorage.setItem("existingUser",JSON.stringify(result.data.user_data));
         sessionStorage.setItem("token",result.data.jwttoken)
+        setIsAuthToken(true)
         toast.success("Login successfully");
         navigate('/')
       }
@@ -159,9 +163,7 @@ useEffect(()=>{
       </Col>
     </Row>
    </div>
-   <ToastContainer
-   position="top-center"
-   autoClose={1000} />
+   
    </>
   )
 }

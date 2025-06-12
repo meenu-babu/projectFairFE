@@ -33,6 +33,7 @@ const [isToken,setIsToken]=useState(false)
   },[searchKey])
   return (
    <>
+   {
    isToken ?
     <div>
 
@@ -69,12 +70,13 @@ const [isToken,setIsToken]=useState(false)
       <img src="https://web.rechargeguru.net/images/login-header.jpg" height={'400px'}/>
 
       <p className='mt-3 mb-3 fs-5 fw-bold'>
-        <Link to={'/login'} style={{textDecoration:none,color:'blue'}}>
+        <Link to={'/login'} style={{textDecoration:'none',color:'blue'}}>
         LOGIN
         </Link> TO VIEW MORE PROJECTS
       </p>
 
     </div>
+    }
 
    </>
   )

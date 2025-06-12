@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import AddProject from './AddProject'
 import { Link } from 'react-router-dom'
 import EditPjoject from './EditPjoject'
-import { deleteProject, deleteProjectApi, getUserProjectApi } from '../services/allApi'
+import {  deleteProjectApi, getUserProjectApi } from '../services/allApi'
 import { addProjectResponseContext, editProjectResponseContext } from '../Context/ContextShare'
 import { toast } from 'react-toastify'
+
 
 function MyProject() {
   const [userProject,setUserProject]=useState([])
@@ -37,7 +38,7 @@ const handleDelete=async(projectId)=>{
   }
 
 const result= await deleteProjectApi(projectId,reqHeader);
-if(result.status==='200'){
+if(result.status===200){
   console.log("deleted data details")
   console.log(result)
   toast.success(`${result.data.title}project deleted successfully`)
@@ -87,6 +88,7 @@ else{
        
     </div>
     
+   
     </>
   )
 }
