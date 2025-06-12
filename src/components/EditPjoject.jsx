@@ -118,7 +118,7 @@ const handleCloseClear=()=>{
             }
   return (
    <>
-   <i class="fa-solid fa-pen-to-square ms-3 text-danger" onClick={handleShow}></i>
+   <i class="fa-solid fa-pen-to-square ms-3 text-danger"  style={{cursor:'pointer'}}  onClick={handleShow}></i>
 
    <Modal show={show} onHide={handleClose} size="lg">
         <Modal.Header closeButton>

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import EditPjoject from './EditPjoject'
 import { deleteProject, deleteProjectApi, getUserProjectApi } from '../services/allApi'
 import { addProjectResponseContext, editProjectResponseContext } from '../Context/ContextShare'
+import { toast } from 'react-toastify'
 
 function MyProject() {
   const [userProject,setUserProject]=useState([])
@@ -36,6 +37,15 @@ const handleDelete=async(projectId)=>{
   }
 
 const result= await deleteProjectApi(projectId,reqHeader);
+if(result.status==='200'){
+  console.log("deleted data details")
+  console.log(result)
+  toast.success(`${result.data.title}project deleted successfully`)
+  getUserProject()
+}
+else{
+  toast.warning("something Happened!!!")
+}
 }
 
 
@@ -62,7 +72,8 @@ const result= await deleteProjectApi(projectId,reqHeader);
                     <i class="fa-solid fa-link  fa-lg " style={{color:'blue'}}></i>
                     </Link>
 
-                    <i className='fa-solid fa-trash ms-3' style={{color:'red'}} onClick={()=>handleDelete(item._id)}></i>
+                    <i className="fa-solid fa-trash ms-3" style={{color:'red'}} 
+                    onClick={()=>handleDelete(item._id)}></i>
                     <EditPjoject project={item}/>
                 </div>
 
