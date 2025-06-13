@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Col, Row } from 'react-bootstrap'
 import firstImage from '../assets/image1.png'
 import { Link } from 'react-router-dom'
 import ProjectCard from '../components/ProjectCard'
 import { getHomeProjectApi } from '../services/allApi'
+import { isAuthTokenContext } from '../Context/ContextShare'
 
 function Home() {
 
-  const [islogin,setIsLogin]=useState(false);
+const [islogin,setIsLogin]=useState(false);
 const [homeProject,setHomeProject]=useState([])
+const {isAuthToken,setIsAuthToken}=useContext(isAuthTokenContext)
 
 
   const getHomeProject=async()=>{
@@ -37,7 +39,7 @@ useEffect(()=>{
           One stop destination for all software projects
         </h6>
         {
-          !islogin ?
+          !isAuthToken ?
           <Link to="/login" style={{textDecoration:'none'}}>
           <button className='btn btn-outline-light mt-3'>GET STARTED<i class="fa-solid fa-arrow-right ms-3"></i></button>
           </Link>
